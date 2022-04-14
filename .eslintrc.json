@@ -15,7 +15,8 @@
         "@typescript-eslint"
     ],
     "rules": {
-        "operator-linebreak":"off",
+        "comma-dangle": "off",
+        "operator-linebreak": "off",
         "object-curly-newline": "off",
         "import/prefer-default-export": "off",
         "import/extensions": [

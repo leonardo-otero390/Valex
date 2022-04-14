@@ -1,38 +1,17 @@
-import connection from "../database/connection";
-import { mapObjectToUpdateQuery } from "../utils/sqlUtils";
-
-export type TransactionTypes =
-  | "groceries"
-  | "restaurant"
-  | "transport"
-  | "education"
-  | "health";
-
-export interface Card {
-  id: number;
-  employeeId: number;
-  number: string;
-  cardholderName: string;
-  securityCode: string;
-  expirationDate: string;
-  password?: string;
-  isVirtual: boolean;
-  originalCardId?: number;
-  isBlocked: boolean;
-  type: TransactionTypes;
-}
-
-export type CardInsertData = Omit<Card, "id">;
-export type CardUpdateData = Partial<Card>;
+import connection from '../database/connection';
+import { mapObjectToUpdateQuery } from '../utils/sqlUtils';
+import { TransactionTypes } from '../types/TransactionTypes';
+import { Card } from '../interfaces/Card';
+import { CardInsertData, CardUpdateData } from '../types/CardTypes';
 
 export async function find() {
-  const result = await connection.query<Card>("SELECT * FROM cards");
+  const result = await connection.query<Card>('SELECT * FROM cards');
   return result.rows;
 }
 
 export async function findById(id: number) {
   const result = await connection.query<Card, [number]>(
-    "SELECT * FROM cards WHERE id=$1",
+    'SELECT * FROM cards WHERE id=$1',
     [id]
   );
 
@@ -44,7 +23,7 @@ export async function findByTypeAndEmployeeId(
   employeeId: number
 ) {
   const result = await connection.query<Card, [TransactionTypes, number]>(
-    `SELECT * FROM cards WHERE type=$1 AND "employeeId"=$2`,
+    'SELECT * FROM cards WHERE type=$1 AND "employeeId"=$2',
     [type, employeeId]
   );
 
@@ -120,5 +99,5 @@ export async function update(id: number, cardData: CardUpdateData) {
 }
 
 export async function remove(id: number) {
-  connection.query<any, [number]>("DELETE FROM cards WHERE id=$1", [id]);
+  connection.query<any, [number]>('DELETE FROM cards WHERE id=$1', [id]);
 }
