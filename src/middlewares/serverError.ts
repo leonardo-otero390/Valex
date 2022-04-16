@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Request, Response, NextFunction } from 'express';
 import HttpError from '../errors/HttpError';
 
