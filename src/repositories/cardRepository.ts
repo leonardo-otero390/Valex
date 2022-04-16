@@ -26,7 +26,7 @@ export async function findByTypeAndEmployeeId(
     'SELECT * FROM cards WHERE type=$1 AND "employeeId"=$2',
     [type, employeeId]
   );
-
+  if (!result.rowCount) return null;
   return result.rows[0];
 }
 
@@ -43,6 +43,18 @@ export async function findByCardDetails(
     [number, cardholderName, expirationDate]
   );
 
+  return result.rows[0];
+}
+
+export async function findByNumber(number: string) {
+  const result = await connection.query<Card, [string]>(
+    ` SELECT 
+        * 
+      FROM cards 
+      WHERE number=$1`,
+    [number]
+  );
+  if (!result.rowCount) return null;
   return result.rows[0];
 }
 

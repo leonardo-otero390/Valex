@@ -1,6 +1,11 @@
-export function mapObjectToUpdateQuery({ object, offset = 1 }) {
-  const objectColumns = Object.keys(object)
-    .map((key, index) => `"${key}"=$${index + offset}`)
+interface IObjectToInsertQuery {
+  object: any;
+  offset: number;
+}
+
+export function mapObjectToUpdateQuery(object: IObjectToInsertQuery) {
+  const objectColumns = Object.keys(object.object)
+    .map((key, index) => `"${key}"=$${index + object.offset}`)
     .join(',');
   const objectValues = Object.values(object);
 
