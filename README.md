@@ -4,16 +4,25 @@ With Valex companies can create benefit cards for their employees with security 
 
 Features
 
-[ x ] Crate new card
-[ ] Activat card
-[ ] Transaction and balance visualization
-[ ] Recharge
-[ ] Shops
+- [x] Crate new card
 
-[ ] Block card
-[ ] Unblock card
-[ ] Online shopping
-[ ] Vitual card features
+- [ ] Activat card
+
+- [ ] Transaction and balance visualization
+
+- [ ] Recharge
+
+- [ ] Shops
+
+#### BONUS
+
+- [ ] Block card
+
+- [ ] Unblock card
+
+- [ ] Online shopping
+
+- [ ] Vitual card features
 
 ## Endpoints
 
@@ -43,15 +52,12 @@ Features
             </summary>
         send body request like this:
 
-        ```json
-       {
-    "employeeId":1,
-    "type":"restaurant"
-
+```json
+{
+  "employeeId": 1,
+  "type": "restaurant"
 }
-
-````
-
+```
 
 - type accepts only `'groceries', 'restaurants', 'transport', 'education', 'health'`
 
@@ -68,7 +74,7 @@ Features
   "isBlocked": true,
   "type": "health"
 }
-````
+```
 
 - it returns status <strong>201</strong> for succes
 
