@@ -11,9 +11,6 @@ export async function create(req: Request, res: Response) {
     return res.status(403).send('Employee not from this company');
   }
   const { type } = req.body;
-  if (await cardService.employeeAlreadyHasCard(employeeId, type)) {
-    return res.status(400).send(`Employee already has ${type} card`);
-  }
   const card = await cardService.create(employee, type);
 
   return res.status(201).send(card);
@@ -46,4 +43,11 @@ export async function payment(req: Request, res: Response) {
   });
 
   return res.sendStatus(201);
+}
+
+export async function balance(req: Request, res: Response) {
+  const { number } = req.params;
+  const result = await cardService.balance(number);
+
+  return res.send(result);
 }

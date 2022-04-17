@@ -20,6 +20,12 @@ routes.post(
   cardController.payment
 );
 
+routes.get(
+  '/:number/balance',
+  validateSchema(cardSchemas.number, 'params'),
+  cardController.balance
+);
+
 routes.use(validateApiKey);
 
 routes.post(
