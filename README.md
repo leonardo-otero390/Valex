@@ -115,7 +115,7 @@ Features
 
  </details>
 
-    <details>
+ <details>
             <summary>
                 <strong>POST</strong> /cards/NUMBER/payment
             </summary>
