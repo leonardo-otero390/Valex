@@ -6,6 +6,7 @@ import { Employee } from '../interfaces/Employee';
 import { TransactionTypes } from '../types/TransactionTypes';
 import * as cardRepository from '../repositories/cardRepository';
 import * as rechargeRepository from '../repositories/rechargeRepository';
+import * as paymentRepository from '../repositories/paymentRepository';
 import NotFound from '../errors/NotFoundError';
 import Conflict from '../errors/ConflictError';
 import Unauthorized from '../errors/UnauthorizedError';
@@ -35,7 +36,17 @@ async function generateUniqueCardNumber() {
   return number;
 }
 
+export async function employeeAlreadyHasCard(
+  employeeId: number,
+  type: TransactionTypes
+) {
+  return !!(await cardRepository.findByTypeAndEmployeeId(type, employeeId));
+}
+
 export async function create(employee: Employee, type: TransactionTypes) {
+  if (employeeAlreadyHasCard(employee.id, type)) {
+    throw new Conflict(`Employee already has ${type} card`);
+  }
   const creditCardCVV = faker.finance.creditCardCVV();
 
   const card = {
@@ -53,13 +64,6 @@ export async function create(employee: Employee, type: TransactionTypes) {
 
   card.securityCode = creditCardCVV;
   return card;
-}
-
-export async function employeeAlreadyHasCard(
-  employeeId: number,
-  type: TransactionTypes
-) {
-  return !!(await cardRepository.findByTypeAndEmployeeId(type, employeeId));
 }
 
 async function findByNumber(number: string) {
@@ -94,4 +98,14 @@ export async function recharge(number: string, amount: number) {
   const { id, expirationDate } = await findByNumber(number);
   if (isExpired(expirationDate)) throw new Forbidden('Card is expired');
   await rechargeRepository.insert({ cardId: id, amount: Math.trunc(amount) });
+}
+
+export async function balance(number: string) {
+  const { id: cardId } = await findByNumber(number);
+  const recharges = await rechargeRepository.findByCardId(cardId);
+  const payments = await paymentRepository.findByCardId(cardId);
+  const totalRecharges = recharges.reduce((acc, rech) => acc + rech.amount, 0);
+  const totalPayments = payments.reduce((acc, pay) => acc + pay.amount, 0);
+  const total = totalRecharges - totalPayments;
+  return { balance: total, transactions: payments, recharges };
 }

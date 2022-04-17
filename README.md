@@ -26,6 +26,88 @@ Features
 
 ## Endpoints
 
+ <details>
+            <summary>
+                <strong>GET</strong> /cards/NUMBER/balance
+            </summary>
+
+- Change NUMBER to card number
+
+- it return
+
+```json
+{
+  "balance": 35000,
+  "transactions": [
+		{ "id": 1, "cardId": 1, "businessId": 1, "businessName": "DrivenEats", "timestamp": "22/01/2022", "amount": 5000 }
+	],
+  "recharges": [
+		{ "id": 1, "cardId": 1, "timestamp": "21/01/2022", "amount": 40000 }
+	]
+}
+```
+
+- it returns status <strong>200</strong> for succes
+
+- it return status <strong>401</strong> if cvc is wrong
+
+ </details>
+
+  <details>
+            <summary>
+                <strong>POST</strong> /cards/NUMBER/activate
+            </summary>
+
+- Change NUMBER to card number
+
+        send body request like this:
+
+```json
+{
+  "password": "1234",
+  "cvc": "123"
+}
+```
+
+- password is always four number digits string
+
+- cvc is always three number digits string
+
+- it returns status <strong>200</strong> for succes
+
+- it return status <strong>401</strong> if cvc is wrong
+
+- it return status <strong>404</strong> if number doesn't match a card number
+
+- it return status <strong>409</strong> if it's already activated
+
+ </details>
+
+   <details>
+            <summary>
+                <strong>POST</strong> /cards/NUMBER/recharge
+            </summary>
+
+- Change NUMBER to card number
+
+        send body request like this:
+
+```json
+{
+  "amount": 50
+}
+```
+
+- amount must to be a integer positive number
+
+- it returns status <strong>200</strong> for succes
+
+- it return status <strong>403</strong> if is expired
+
+- it return status <strong>404</strong> if number doesn't match a card number
+
+ </details>
+
 ### All following need API key
 
 <details>
@@ -81,60 +163,6 @@ Features
 - it return status <strong>400</strong> if employee already has this card type
 
 - it return status <strong>403</strong> if employee not from this company
-
- </details>
-   <details>
-            <summary>
-                <strong>POST</strong> /cards/NUMBER/activate
-            </summary>
-
-- Change NUMBER to card number
-
-        send body request like this:
-
-```json
-  {
-    "password": "1234",
-    "cvc": "123"
-  }
-  ```
-
-- password is always four number digits string
-
-- cvc is always three number digits string
-
-- it returns status <strong>200</strong> for succes
-
-- it return status <strong>401</strong> if cvc is wrong
-
-- it return status <strong>404</strong> if number doesn't match a card number
-
-- it return status <strong>409</strong> if it's already activated
-
- </details>
-
-   <details>
-            <summary>
-                <strong>POST</strong> /cards/NUMBER/recharge
-            </summary>
-
-- Change NUMBER to card number
-
-        send body request like this:
-
-```json
-  {
-    "amount": 50
-  }
-  ```
-
-- amount must to be a integer positive number
-
-- it returns status <strong>200</strong> for succes
-
-- it return status <strong>403</strong> if is expired
-
-- it return status <strong>404</strong> if number doesn't match a card number
 
  </details>
 
