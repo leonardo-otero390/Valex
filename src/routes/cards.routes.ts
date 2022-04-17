@@ -16,6 +16,13 @@ routes.post(
 routes.use(validateApiKey);
 
 routes.post(
+  '/:number/recharge',
+  validateSchema(cardSchemas.number, 'params'),
+  validateSchema(cardSchemas.recharge, 'body'),
+  cardController.recharge
+);
+
+routes.post(
   '/',
   validateSchema(cardSchemas.newCard, 'body'),
   cardController.create

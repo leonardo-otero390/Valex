@@ -28,3 +28,11 @@ export async function activate(req: Request, res: Response) {
 
   return res.sendStatus(200);
 }
+
+export async function recharge(req: Request, res: Response) {
+  const { number } = req.params;
+  const { amount } = req.body;
+  await cardService.recharge(number, amount);
+
+  return res.sendStatus(201);
+}

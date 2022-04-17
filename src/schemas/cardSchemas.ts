@@ -15,3 +15,7 @@ export const activateCard = Joi.object({
 export const number = Joi.object({
   number: Joi.string().length(16).pattern(/\d/).required(),
 });
+
+export const recharge = Joi.object({
+  amount: Joi.number().greater(0).required(),
+});

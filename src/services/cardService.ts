@@ -1,12 +1,15 @@
 import faker from '@faker-js/faker';
 import dayjs from 'dayjs';
+import customParseFormat from 'dayjs/plugin/customParseFormat';
 import bcrypt from 'bcrypt';
 import { Employee } from '../interfaces/Employee';
 import { TransactionTypes } from '../types/TransactionTypes';
 import * as cardRepository from '../repositories/cardRepository';
+import * as rechargeRepository from '../repositories/rechargeRepository';
 import NotFound from '../errors/NotFoundError';
 import Conflict from '../errors/ConflictError';
 import Unauthorized from '../errors/UnauthorizedError';
+import Forbidden from '../errors/Forbidden';
 
 function formatHolderName(fullName: string) {
   const names = fullName.split(' ');
@@ -79,4 +82,16 @@ export async function activate(
   await cardRepository.update(card.id, {
     password: bcrypt.hashSync(password, 10),
   });
+}
+
+function isExpired(expirationDate: string) {
+  dayjs.extend(customParseFormat);
+  const date = dayjs(expirationDate, 'MM/YY');
+  return dayjs(date).isBefore(dayjs());
+}
+
+export async function recharge(number: string, amount: number) {
+  const { id, expirationDate } = await findByNumber(number);
+  if (isExpired(expirationDate)) throw new Forbidden('Card is expired');
+  await rechargeRepository.insert({ cardId: id, amount: Math.trunc(amount) });
 }
