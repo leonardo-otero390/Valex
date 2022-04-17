@@ -8,11 +8,11 @@ Features
 
 - [x] Activate card
 
-- [ ] Transaction and balance visualization
+- [x] Transaction and balance visualization
 
 - [x] Recharge
 
-- [ ] Payment
+- [x] Payment
 
 #### BONUS
 
