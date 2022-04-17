@@ -6,7 +6,7 @@ Features
 
 - [x] Crate new card
 
-- [ ] Activat card
+- [x] Activate card
 
 - [ ] Transaction and balance visualization
 
@@ -78,9 +78,37 @@ Features
 
 - it returns status <strong>201</strong> for succes
 
-- it return status <strong>400</strong> for invalid body request or employee already has this card type
+- it return status <strong>400</strong> if employee already has this card type
 
 - it return status <strong>403</strong> if employee not from this company
+
+ </details>
+ </details>
+   <details>
+            <summary>
+                <strong>POST</strong> /cards/NUMBER/activate
+            </summary>
+
+- Change NUMBER to card number
+
+        send body request like this:
+
+```json
+  {
+    "password": "1234",
+    "cvc": "123"
+  }
+  ```
+
+- password is always four number digits string
+
+- cvc is always three number digits string
+
+- it returns status <strong>200</strong> for succes
+
+- it return status <strong>401</strong> if cvc is wrong
+
+- it return status <strong>409</strong> if it's already activated
 
  </details>
 

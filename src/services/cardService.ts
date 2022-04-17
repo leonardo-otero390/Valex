@@ -6,6 +6,7 @@ import { TransactionTypes } from '../types/TransactionTypes';
 import * as cardRepository from '../repositories/cardRepository';
 import NotFound from '../errors/NotFoundError';
 import Conflict from '../errors/ConflictError';
+import Unauthorized from '../errors/UnauthorizedError';
 
 function formatHolderName(fullName: string) {
   const names = fullName.split(' ');
@@ -72,7 +73,7 @@ export async function activate(
   const card = await findByNumber(number);
   if (card.password) throw new Conflict('Card already activated');
   if (!bcrypt.compareSync(securityCode, card.securityCode)) {
-    throw new NotFound('Security code is incorrect');
+    throw new Unauthorized('Security code is incorrect');
   }
 
   await cardRepository.update(card.id, {
