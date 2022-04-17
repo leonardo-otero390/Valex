@@ -13,6 +13,13 @@ routes.post(
   cardController.activate
 );
 
+routes.post(
+  '/:number/payment',
+  validateSchema(cardSchemas.number, 'params'),
+  validateSchema(cardSchemas.payment, 'body'),
+  cardController.payment
+);
+
 routes.get(
   '/:number/balance',
   validateSchema(cardSchemas.number, 'params'),

@@ -26,33 +26,6 @@ Features
 
 ## Endpoints
 
- <details>
-            <summary>
-                <strong>GET</strong> /cards/NUMBER/balance
-            </summary>
-
-- Change NUMBER to card number
-
-- it return
-
-```json
-{
-  "balance": 35000,
-  "transactions": [
-		{ "id": 1, "cardId": 1, "businessId": 1, "businessName": "DrivenEats", "timestamp": "22/01/2022", "amount": 5000 }
-	],
-  "recharges": [
-		{ "id": 1, "cardId": 1, "timestamp": "21/01/2022", "amount": 40000 }
-	]
-}
-```
-
-- it returns status <strong>200</strong> for succes
-
-- it return status <strong>401</strong> if cvc is wrong
-
- </details>
-
   <details>
             <summary>
                 <strong>POST</strong> /cards/NUMBER/activate
@@ -83,6 +56,40 @@ Features
 
  </details>
 
+ <details>
+            <summary>
+                <strong>GET</strong> /cards/NUMBER/balance
+            </summary>
+
+- Change NUMBER to card number
+
+- it return
+
+```json
+{
+  "balance": 35000,
+  "transactions": [
+    {
+      "id": 1,
+      "cardId": 1,
+      "businessId": 1,
+      "businessName": "DrivenEats",
+      "timestamp": "22/01/2022",
+      "amount": 5000
+    }
+  ],
+  "recharges": [
+    { "id": 1, "cardId": 1, "timestamp": "21/01/2022", "amount": 40000 }
+  ]
+}
+```
+
+- it returns status <strong>200</strong> for succes
+
+- it return status <strong>401</strong> if cvc is wrong
+
+ </details>
+
    <details>
             <summary>
                 <strong>POST</strong> /cards/NUMBER/recharge
@@ -100,11 +107,34 @@ Features
 
 - amount must to be a integer positive number
 
-- it returns status <strong>200</strong> for succes
+- it returns status <strong>200</strong> for success
 
 - it return status <strong>403</strong> if is expired
 
 - it return status <strong>404</strong> if number doesn't match a card number
+
+ </details>
+
+    <details>
+            <summary>
+                <strong>POST</strong> /cards/NUMBER/payment
+            </summary>
+
+- Change NUMBER to card number
+
+        send body request like this:
+
+```json
+{
+  "password": "1234",
+  "amount": 3,
+  "businessId": 1
+}
+```
+
+- amount must to be a integer positive number
+
+- it returns status <strong>201</strong> for success
 
  </details>
 
