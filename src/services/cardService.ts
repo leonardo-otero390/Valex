@@ -4,6 +4,8 @@ import bcrypt from 'bcrypt';
 import { Employee } from '../interfaces/Employee';
 import { TransactionTypes } from '../types/TransactionTypes';
 import * as cardRepository from '../repositories/cardRepository';
+import NotFound from '../errors/NotFoundError';
+import Conflict from '../errors/ConflictError';
 
 function formatHolderName(fullName: string) {
   const names = fullName.split(' ');
@@ -16,11 +18,15 @@ function formatHolderName(fullName: string) {
   return `${firstName} ${middleNames.join(' ')} ${lastName}`;
 }
 
+function genCreditCardNumber() {
+  return faker.finance.creditCardNumber('mastercard').replace(/\s|-/g, '');
+}
+
 async function generateUniqueCardNumber() {
-  let number = faker.finance.creditCardNumber();
+  let number = genCreditCardNumber();
   // eslint-disable-next-line no-await-in-loop
   while (await cardRepository.findByNumber(number)) {
-    number = faker.finance.creditCardNumber();
+    number = genCreditCardNumber();
   }
   return number;
 }
@@ -50,4 +56,26 @@ export async function employeeAlreadyHasCard(
   type: TransactionTypes
 ) {
   return !!(await cardRepository.findByTypeAndEmployeeId(type, employeeId));
+}
+
+async function findByNumber(number: string) {
+  const card = await cardRepository.findByNumber(number);
+  if (!card) throw new NotFound('Card not found');
+  return card;
+}
+
+export async function activate(
+  number: string,
+  securityCode: string,
+  password: string
+) {
+  const card = await findByNumber(number);
+  if (card.password) throw new Conflict('Card already activated');
+  if (!bcrypt.compareSync(securityCode, card.securityCode)) {
+    throw new NotFound('Security code is incorrect');
+  }
+
+  await cardRepository.update(card.id, {
+    password: bcrypt.hashSync(password, 10),
+  });
 }

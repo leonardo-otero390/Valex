@@ -3,9 +3,12 @@ interface IObjectToInsertQuery {
   offset: number;
 }
 
-export function mapObjectToUpdateQuery(object: IObjectToInsertQuery) {
-  const objectColumns = Object.keys(object.object)
-    .map((key, index) => `"${key}"=$${index + object.offset}`)
+export function mapObjectToUpdateQuery({
+  object,
+  offset = 1,
+}: IObjectToInsertQuery) {
+  const objectColumns = Object.keys(object)
+    .map((key, index) => `"${key}"=$${index + offset}`)
     .join(',');
   const objectValues = Object.values(object);
 

@@ -20,3 +20,11 @@ export async function create(req: Request, res: Response) {
 
   return res.status(201).send(card);
 }
+
+export async function activate(req: Request, res: Response) {
+  const { number } = req.params;
+  const { cvc, password } = req.body;
+  await cardService.activate(number, cvc, password);
+
+  return res.sendStatus(200);
+}
