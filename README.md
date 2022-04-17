@@ -10,9 +10,9 @@ Features
 
 - [ ] Transaction and balance visualization
 
-- [ ] Recharge
+- [x] Recharge
 
-- [ ] Shops
+- [ ] Payment
 
 #### BONUS
 
@@ -83,7 +83,6 @@ Features
 - it return status <strong>403</strong> if employee not from this company
 
  </details>
- </details>
    <details>
             <summary>
                 <strong>POST</strong> /cards/NUMBER/activate
@@ -108,7 +107,34 @@ Features
 
 - it return status <strong>401</strong> if cvc is wrong
 
+- it return status <strong>404</strong> if number doesn't match a card number
+
 - it return status <strong>409</strong> if it's already activated
+
+ </details>
+
+   <details>
+            <summary>
+                <strong>POST</strong> /cards/NUMBER/recharge
+            </summary>
+
+- Change NUMBER to card number
+
+        send body request like this:
+
+```json
+  {
+    "amount": 50
+  }
+  ```
+
+- amount must to be a integer positive number
+
+- it returns status <strong>200</strong> for succes
+
+- it return status <strong>403</strong> if is expired
+
+- it return status <strong>404</strong> if number doesn't match a card number
 
  </details>
 
