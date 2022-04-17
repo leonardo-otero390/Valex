@@ -6,6 +6,6 @@ export async function findById(id: number) {
     'SELECT * FROM businesses WHERE id=$1',
     [id]
   );
-
+  if (!result.rowCount) return null;
   return result.rows[0];
 }

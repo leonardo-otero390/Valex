@@ -1,12 +1,10 @@
 import { Request, Response } from 'express';
 import * as employeeService from '../services/employeeService';
 import * as cardService from '../services/cardService';
+import * as paymentyService from '../services/paymentService';
 
 export async function create(req: Request, res: Response) {
-  const employeeId = Number(req.body.employeeId);
-  if (Number.isNaN(employeeId)) {
-    return res.status(400).send('Invalid employeeId');
-  }
+  const { employeeId } = req.body;
   const employee = await employeeService.find(employeeId);
   const { company } = res.locals;
   if (employee.companyId !== company.id) {
@@ -33,6 +31,19 @@ export async function recharge(req: Request, res: Response) {
   const { number } = req.params;
   const { amount } = req.body;
   await cardService.recharge(number, amount);
+
+  return res.sendStatus(201);
+}
+
+export async function payment(req: Request, res: Response) {
+  const { number } = req.params;
+  const { amount, password, businessId } = req.body;
+  await paymentyService.create({
+    cardNumber: number,
+    amount,
+    password,
+    businessId,
+  });
 
   return res.sendStatus(201);
 }

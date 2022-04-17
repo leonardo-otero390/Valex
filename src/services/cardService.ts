@@ -62,7 +62,7 @@ export async function employeeAlreadyHasCard(
   return !!(await cardRepository.findByTypeAndEmployeeId(type, employeeId));
 }
 
-async function findByNumber(number: string) {
+export async function findByNumber(number: string) {
   const card = await cardRepository.findByNumber(number);
   if (!card) throw new NotFound('Card not found');
   return card;
@@ -84,14 +84,14 @@ export async function activate(
   });
 }
 
-function isExpired(expirationDate: string) {
+export function checkExpiration(expirationDate: string) {
   dayjs.extend(customParseFormat);
   const date = dayjs(expirationDate, 'MM/YY');
-  return dayjs(date).isBefore(dayjs());
+  if (dayjs(date).isBefore(dayjs())) throw new Forbidden('Card is expired');
 }
 
 export async function recharge(number: string, amount: number) {
   const { id, expirationDate } = await findByNumber(number);
-  if (isExpired(expirationDate)) throw new Forbidden('Card is expired');
+  checkExpiration(expirationDate);
   await rechargeRepository.insert({ cardId: id, amount: Math.trunc(amount) });
 }
