@@ -20,6 +20,13 @@ routes.post(
   cardController.payment
 );
 
+routes.post(
+  '/:number/block',
+  validateSchema(cardSchemas.number, 'params'),
+  validateSchema(cardSchemas.password, 'body'),
+  cardController.block
+);
+
 routes.get(
   '/:number/balance',
   validateSchema(cardSchemas.number, 'params'),

@@ -12,6 +12,35 @@ import Conflict from '../errors/ConflictError';
 import Unauthorized from '../errors/UnauthorizedError';
 import Forbidden from '../errors/Forbidden';
 
+export async function findByNumber(number: string) {
+  const card = await cardRepository.findByNumber(number);
+  if (!card) throw new NotFound('Card not found');
+  return card;
+}
+
+export function checkExpiration(expirationDate: string) {
+  dayjs.extend(customParseFormat);
+  const date = dayjs(expirationDate, 'MM/YY');
+  if (dayjs(date).isBefore(dayjs())) throw new Forbidden('Card is expired');
+}
+
+export async function block(number: string, password: string) {
+  const {
+    isBlocked,
+    expirationDate,
+    password: hashedPassword,
+    id,
+  } = await findByNumber(number);
+  if (isBlocked) throw new Conflict('Card is already blocked');
+  checkExpiration(expirationDate);
+  if (!hashedPassword) throw new Forbidden('Card is not active');
+  if (!bcrypt.compareSync(password, hashedPassword)) {
+    throw new Unauthorized('Password is incorrect');
+  }
+
+  await cardRepository.update(id, { isBlocked: true });
+}
+
 function formatHolderName(fullName: string) {
   const names = fullName.split(' ');
   const firstName = names[0];
@@ -56,19 +85,13 @@ export async function create(employee: Employee, type: TransactionTypes) {
     securityCode: bcrypt.hashSync(creditCardCVV, 10),
     expirationDate: dayjs().add(5, 'year').format('MM/YY'),
     isVirtual: false,
-    isBlocked: true,
+    isBlocked: false,
     type,
   };
 
   await cardRepository.insert(card);
 
   card.securityCode = creditCardCVV;
-  return card;
-}
-
-export async function findByNumber(number: string) {
-  const card = await cardRepository.findByNumber(number);
-  if (!card) throw new NotFound('Card not found');
   return card;
 }
 
@@ -86,12 +109,6 @@ export async function activate(
   await cardRepository.update(card.id, {
     password: bcrypt.hashSync(password, 10),
   });
-}
-
-export function checkExpiration(expirationDate: string) {
-  dayjs.extend(customParseFormat);
-  const date = dayjs(expirationDate, 'MM/YY');
-  if (dayjs(date).isBefore(dayjs())) throw new Forbidden('Card is expired');
 }
 
 export async function balance(number: string) {

@@ -4,6 +4,13 @@ import * as cardService from '../services/cardService';
 import * as paymentService from '../services/paymentService';
 import * as rechargeService from '../services/rechargeService';
 
+export async function block(req: Request, res: Response) {
+  const { number } = req.params;
+  const { password } = req.body;
+  await cardService.block(number, password);
+  res.sendStatus(200);
+}
+
 export async function create(req: Request, res: Response) {
   const { employeeId } = req.body;
   const employee = await employeeService.find(employeeId);

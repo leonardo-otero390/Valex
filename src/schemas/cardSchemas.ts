@@ -20,6 +20,10 @@ export const recharge = Joi.object({
   amount: Joi.number().greater(0).required(),
 });
 
+export const password = Joi.object({
+  password: Joi.string().required(),
+});
+
 export const payment = Joi.object({
   amount: Joi.number().greater(0).required(),
   password: Joi.string().required(),

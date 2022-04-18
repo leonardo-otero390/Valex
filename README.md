@@ -86,8 +86,6 @@ Features
 
 - it returns status <strong>200</strong> for succes
 
-- it return status <strong>401</strong> if cvc is wrong
-
  </details>
 
  <details>
@@ -107,7 +105,7 @@ Features
 }
 ```
 
-- amount must to be a integer positive number
+- amount must to be an integer positive number
 
 - it returns status <strong>201</strong> for success
 
