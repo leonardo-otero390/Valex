@@ -12,4 +12,11 @@ routes.post(
   businessController.payment
 );
 
+routes.post(
+  '/:id/online/payment',
+  validateSchema(businessSchemas.id, 'params'),
+  validateSchema(businessSchemas.onlinePayment, 'body'),
+  businessController.onlinePayment
+);
+
 export default routes;
