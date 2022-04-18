@@ -94,12 +94,6 @@ export function checkExpiration(expirationDate: string) {
   if (dayjs(date).isBefore(dayjs())) throw new Forbidden('Card is expired');
 }
 
-export async function recharge(number: string, amount: number) {
-  const { id, expirationDate } = await findByNumber(number);
-  checkExpiration(expirationDate);
-  await rechargeRepository.insert({ cardId: id, amount: Math.trunc(amount) });
-}
-
 export async function balance(number: string) {
   const { id: cardId } = await findByNumber(number);
   const recharges = await rechargeRepository.findByCardId(cardId);

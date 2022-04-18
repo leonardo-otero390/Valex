@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import * as employeeService from '../services/employeeService';
 import * as cardService from '../services/cardService';
 import * as paymentService from '../services/paymentService';
+import * as rechargeService from '../services/rechargeService';
 
 export async function create(req: Request, res: Response) {
   const { employeeId } = req.body;
@@ -27,7 +28,7 @@ export async function activate(req: Request, res: Response) {
 export async function recharge(req: Request, res: Response) {
   const { number } = req.params;
   const { amount } = req.body;
-  await cardService.recharge(number, amount);
+  await rechargeService.create(number, amount);
 
   return res.sendStatus(201);
 }
