@@ -14,13 +14,6 @@ routes.post(
 );
 
 routes.post(
-  '/:id/payment',
-  validateSchema(cardSchemas.id, 'params'),
-  validateSchema(cardSchemas.payment, 'body'),
-  cardController.payment
-);
-
-routes.post(
   '/:id/block',
   validateSchema(cardSchemas.id, 'params'),
   validateSchema(cardSchemas.password, 'body'),

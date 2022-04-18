@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import * as employeeService from '../services/employeeService';
 import * as cardService from '../services/cardService';
-import * as paymentService from '../services/paymentService';
 import * as rechargeService from '../services/rechargeService';
 
 export async function block(req: Request, res: Response) {
@@ -36,19 +35,6 @@ export async function recharge(req: Request, res: Response) {
   const id = Number(req.params.id);
   const { amount } = req.body;
   await rechargeService.create(id, amount);
-
-  return res.sendStatus(201);
-}
-
-export async function payment(req: Request, res: Response) {
-  const { number } = req.params;
-  const { amount, password, businessId } = req.body;
-  await paymentService.create({
-    cardNumber: number,
-    amount,
-    password,
-    businessId,
-  });
 
   return res.sendStatus(201);
 }

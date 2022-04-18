@@ -90,10 +90,10 @@ Features
 
  <details>
             <summary>
-                <strong>POST</strong> /cards/NUMBER/payment
+                <strong>POST</strong> /business/ID/payment
             </summary>
 
-- Change NUMBER to card number
+- Change ID to business number
 
         send body request like this:
 
@@ -101,7 +101,7 @@ Features
 {
   "password": "1234",
   "amount": 3,
-  "businessId": 1
+  "cardNumber": "1234567890123456"
 }
 ```
 
