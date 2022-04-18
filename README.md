@@ -16,15 +16,42 @@ Features
 
 #### BONUS
 
-- [ ] Block card
+- [x] Block card
 
-- [ ] Unblock card
+- [x] Unblock card
 
 - [ ] Online shopping
 
 - [ ] Vitual card features
 
 ## Endpoints
+
+<details>
+            <summary>
+                <strong>POST</strong> /cards/ID/block
+            </summary>
+
+- Change ID to card id
+
+- Change block to unblock if you want to ublock card
+
+        send body request like this:
+
+```json
+{
+  "password": "1234"
+}
+```
+
+- it returns status <strong>200</strong> for succes
+
+- it return status <strong>403</strong> if it's expired or not active
+
+- it return status <strong>404</strong> if id doesn't match a card
+
+- it return status <strong>409</strong> if it's already blocked/unblocked
+
+ </details>
 
   <details>
             <summary>
@@ -50,7 +77,7 @@ Features
 
 - it return status <strong>401</strong> if cvc is wrong
 
-- it return status <strong>404</strong> if number doesn't match a card number
+- it return status <strong>404</strong> if id doesn't match a card
 
 - it return status <strong>409</strong> if it's already activated
 
@@ -156,7 +183,7 @@ Features
   "securityCode": "026",
   "expirationDate": "04/27",
   "isVirtual": false,
-  "isBlocked": true,
+  "isBlocked": false,
   "type": "health"
 }
 ```
@@ -190,7 +217,7 @@ Features
 
 - it return status <strong>403</strong> if is expired
 
-- it return status <strong>404</strong> if number doesn't match a card number
+- it return status <strong>404</strong> if id doesn't match a card
 
  </details>
 
