@@ -19,8 +19,10 @@ export async function create(paymentReq: PaymentReq) {
     id: cardId,
     expirationDate,
     password: hashedPassword,
+    isBlocked,
     type: cardType,
   } = await cardService.findByNumber(cardNumber);
+  if (isBlocked) throw new Forbidden('Card is blocked');
   cardService.checkExpiration(expirationDate);
   if (!hashedPassword) throw new Forbidden('Card is not active');
   const { type: businessesType } = await businessService.find(businessId);
