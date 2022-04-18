@@ -5,9 +5,9 @@ import * as paymentService from '../services/paymentService';
 import * as rechargeService from '../services/rechargeService';
 
 export async function block(req: Request, res: Response) {
-  const { number } = req.params;
+  const id = Number(req.params.id);
   const { password } = req.body;
-  await cardService.block(number, password);
+  await cardService.block(id, password);
   res.sendStatus(200);
 }
 
@@ -25,17 +25,17 @@ export async function create(req: Request, res: Response) {
 }
 
 export async function activate(req: Request, res: Response) {
-  const { number } = req.params;
+  const id = Number(req.params.id);
   const { cvc, password } = req.body;
-  await cardService.activate(number, cvc, password);
+  await cardService.activate(id, cvc, password);
 
   return res.sendStatus(200);
 }
 
 export async function recharge(req: Request, res: Response) {
-  const { number } = req.params;
+  const id = Number(req.params.id);
   const { amount } = req.body;
-  await rechargeService.create(number, amount);
+  await rechargeService.create(id, amount);
 
   return res.sendStatus(201);
 }
@@ -54,8 +54,8 @@ export async function payment(req: Request, res: Response) {
 }
 
 export async function balance(req: Request, res: Response) {
-  const { number } = req.params;
-  const result = await cardService.balance(number);
+  const id = Number(req.params.id);
+  const result = await cardService.balance(id);
 
   return res.send(result);
 }

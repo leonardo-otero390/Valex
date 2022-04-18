@@ -28,10 +28,10 @@ Features
 
   <details>
             <summary>
-                <strong>POST</strong> /cards/NUMBER/activate
+                <strong>POST</strong> /cards/ID/activate
             </summary>
 
-- Change NUMBER to card number
+- Change ID to card id
 
         send body request like this:
 
@@ -58,10 +58,10 @@ Features
 
  <details>
             <summary>
-                <strong>GET</strong> /cards/NUMBER/balance
+                <strong>GET</strong> /cards/ID/balance
             </summary>
 
-- Change NUMBER to card number
+- Change ID to card id
 
 - it return
 
@@ -171,10 +171,10 @@ Features
 
    <details>
             <summary>
-                <strong>POST</strong> /cards/NUMBER/recharge
+                <strong>POST</strong> /cards/ID/recharge
             </summary>
 
-- Change NUMBER to card number
+- Change ID to card ID
 
         send body request like this:
 

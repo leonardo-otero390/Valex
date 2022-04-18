@@ -6,8 +6,8 @@ import * as businessService from './businessService';
 import * as paymentRepository from '../repositories/paymentRepository';
 import Unauthorized from '../errors/UnauthorizedError';
 
-async function checkBalance(amount: number, cardNumber: string) {
-  const { balance } = await cardService.balance(cardNumber);
+async function checkBalance(amount: number, id: number) {
+  const { balance } = await cardService.balance(id);
   if (balance < amount) {
     throw new Forbidden('Insufficient funds');
   }
@@ -31,6 +31,6 @@ export async function create(paymentReq: PaymentReq) {
     throw new Unauthorized('Password is incorrect');
   }
 
-  await checkBalance(amount, cardNumber);
+  await checkBalance(amount, cardId);
   await paymentRepository.insert({ cardId, amount, businessId });
 }

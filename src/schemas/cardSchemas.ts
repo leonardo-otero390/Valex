@@ -12,8 +12,8 @@ export const activateCard = Joi.object({
   password: Joi.string().length(4).pattern(/\d/).required(),
 });
 
-export const number = Joi.object({
-  number: Joi.string().length(16).pattern(/\d/).required(),
+export const id = Joi.object({
+  id: Joi.number().required(),
 });
 
 export const recharge = Joi.object({

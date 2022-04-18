@@ -12,6 +12,12 @@ import Conflict from '../errors/ConflictError';
 import Unauthorized from '../errors/UnauthorizedError';
 import Forbidden from '../errors/Forbidden';
 
+export async function find(id: number) {
+  const card = await cardRepository.findById(id);
+  if (!card) throw new NotFound('Card not found');
+  return card;
+}
+
 export async function findByNumber(number: string) {
   const card = await cardRepository.findByNumber(number);
   if (!card) throw new NotFound('Card not found');
@@ -24,13 +30,13 @@ export function checkExpiration(expirationDate: string) {
   if (dayjs(date).isBefore(dayjs())) throw new Forbidden('Card is expired');
 }
 
-export async function block(number: string, password: string) {
+export async function block(cardId: number, password: string) {
   const {
     isBlocked,
     expirationDate,
     password: hashedPassword,
     id,
-  } = await findByNumber(number);
+  } = await find(cardId);
   if (isBlocked) throw new Conflict('Card is already blocked');
   checkExpiration(expirationDate);
   if (!hashedPassword) throw new Forbidden('Card is not active');
@@ -89,18 +95,18 @@ export async function create(employee: Employee, type: TransactionTypes) {
     type,
   };
 
-  await cardRepository.insert(card);
+  const { id } = await cardRepository.insert(card);
 
   card.securityCode = creditCardCVV;
-  return card;
+  return { ...card, id };
 }
 
 export async function activate(
-  number: string,
+  id: number,
   securityCode: string,
   password: string
 ) {
-  const card = await findByNumber(number);
+  const card = await find(id);
   if (card.password) throw new Conflict('Card already activated');
   if (!bcrypt.compareSync(securityCode, card.securityCode)) {
     throw new Unauthorized('Security code is incorrect');
@@ -111,10 +117,9 @@ export async function activate(
   });
 }
 
-export async function balance(number: string) {
-  const { id: cardId } = await findByNumber(number);
-  const recharges = await rechargeRepository.findByCardId(cardId);
-  const payments = await paymentRepository.findByCardId(cardId);
+export async function balance(id: number) {
+  const recharges = await rechargeRepository.findByCardId(id);
+  const payments = await paymentRepository.findByCardId(id);
   const totalRecharges = recharges.reduce((acc, rech) => acc + rech.amount, 0);
   const totalPayments = payments.reduce((acc, pay) => acc + pay.amount, 0);
   const total = totalRecharges - totalPayments;
