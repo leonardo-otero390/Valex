@@ -20,6 +20,13 @@ routes.post(
   cardController.block
 );
 
+routes.post(
+  '/:id/unblock',
+  validateSchema(cardSchemas.id, 'params'),
+  validateSchema(cardSchemas.password, 'body'),
+  cardController.unblock
+);
+
 routes.get(
   '/:id/balance',
   validateSchema(cardSchemas.id, 'params'),

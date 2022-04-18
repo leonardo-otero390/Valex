@@ -3,6 +3,13 @@ import * as employeeService from '../services/employeeService';
 import * as cardService from '../services/cardService';
 import * as rechargeService from '../services/rechargeService';
 
+export async function unblock(req: Request, res: Response) {
+  const id = Number(req.params.id);
+  const { password } = req.body;
+  await cardService.unblock(id, password);
+  res.sendStatus(200);
+}
+
 export async function block(req: Request, res: Response) {
   const id = Number(req.params.id);
   const { password } = req.body;

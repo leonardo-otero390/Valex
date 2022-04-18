@@ -30,20 +30,40 @@ export function checkExpiration(expirationDate: string) {
   if (dayjs(date).isBefore(dayjs())) throw new Forbidden('Card is expired');
 }
 
-export async function block(cardId: number, password: string) {
+async function findAndValidatePasswordReturningBlockStatus(
+  id: number,
+  password: string
+) {
   const {
     isBlocked,
     expirationDate,
     password: hashedPassword,
-    id,
-  } = await find(cardId);
-  if (isBlocked) throw new Conflict('Card is already blocked');
+  } = await find(id);
   checkExpiration(expirationDate);
   if (!hashedPassword) throw new Forbidden('Card is not active');
   if (!bcrypt.compareSync(password, hashedPassword)) {
     throw new Unauthorized('Password is incorrect');
   }
+  return isBlocked;
+}
 
+export async function unblock(id: number, password: string) {
+  const isBlocked = await findAndValidatePasswordReturningBlockStatus(
+    id,
+    password
+  );
+
+  if (!isBlocked) throw new Conflict('Card is not blocked');
+  await cardRepository.update(id, { isBlocked: false });
+}
+
+export async function block(id: number, password: string) {
+  const isBlocked = await findAndValidatePasswordReturningBlockStatus(
+    id,
+    password
+  );
+
+  if (!isBlocked) throw new Conflict('Card is not blocked');
   await cardRepository.update(id, { isBlocked: true });
 }
 
