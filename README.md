@@ -20,7 +20,7 @@ Features
 
 - [x] Unblock card
 
-- [ ] Online shopping
+- [x] Online shopping
 
 - [ ] Vitual card features
 
@@ -129,6 +129,31 @@ Features
   "password": "1234",
   "amount": 3,
   "cardNumber": "1234567890123456"
+}
+```
+
+- amount must to be an integer positive number
+
+- it returns status <strong>201</strong> for success
+
+ </details>
+
+ <details>
+            <summary>
+                <strong>POST</strong> /business/ID/payment
+            </summary>
+
+- Change ID to business number
+
+        send body request like this:
+
+```json
+{
+    "cardNumber": "6771899426161258",
+    "amount": 3,
+    "expirationDate": "04/27",
+    "cvc": "316",
+    "name": "Ciclana M Madeira"
 }
 ```
 
